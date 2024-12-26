@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useMutation } from '@tanstack/react-query';
-import { updateUser } from '../../services/authService'; // Import the updateUser service
+import { updateUser } from '../../services/authService'; 
+import { getUserDetails } from '../../services/authService';
 
 interface User {
     _id: string;
@@ -12,34 +13,36 @@ interface User {
   }
   
   const Profile = () => {
-    const { user } = useAuth(); // Assuming user data is stored in context
+    const { user } = useAuth(); 
     const [userData, setUserData] = useState<User | null>(null);
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
   
     useEffect(() => {
-      // Fetch user details using the auth service
-      if (user?._id) {
-        getUserDetails(user._id) // Call the function in authService to get user details
-          .then((response) => {
-            setUserData(response);
-            setFirstName(response.firstName);
-            setLastName(response.lastName);
-            setEmail(response.email);
-          })
-          .catch((error) => {
-            console.error("Error fetching user data", error);
-          });
-      }
-    }, [user]);
+        if (user?._id) {
+          getUserDetails(user._id)
+            .then((response) => {
+              setUserData(response);
+              setFirstName(response.firstName);
+              setLastName(response.lastName);
+              setEmail(response.email);
+            })
+            .catch((error) => {
+              console.error('Error fetching user data:', error);
+              alert('Failed to load user details. Please try again later.');
+            });
+        }
+      }, [user]);
+      
+      
   
     const mutation = useMutation({
       mutationFn: (updatedData: { firstName: string; lastName: string; email: string }) =>
         updateUser(user?._id!, updatedData),
       onSuccess: (data) => {
-        // Handle successful update, e.g., show a success message or update state
-        setUserData(data); // Assuming the response returns the updated user data
+      
+        setUserData(data); 
       },
       onError: (error) => {
         console.error("Error updating user data", error);
@@ -47,9 +50,9 @@ interface User {
     });
   
     const handleUpdate = (e: React.FormEvent) => {
-      e.preventDefault();
-      mutation.mutate({ firstName, lastName, email });
-    };
+        e.preventDefault();
+        mutation.mutate({ firstName, lastName, email }); 
+      };
   
     if (!userData) return <div>Loading...</div>;
   

@@ -27,7 +27,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-4">
               {/* Navigation Links */}
               <Link
-                to="/"
+                to="/home"
                 className="text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100"
               >
                 <Home className="w-6 h-6" />

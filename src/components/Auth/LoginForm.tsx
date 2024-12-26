@@ -24,10 +24,10 @@ export default function LoginForm() {
     try {
       setError(null);
       const { user, token } = await loginUser(data); 
-      navigate('/home');// Destructure user and token
-      login(token); // Save the token for authentication purposes
+      navigate('/home');
+      login(token); 
       localStorage.setItem('user', JSON.stringify(user));
-       // Save the user object for display purposes
+     
     } catch (err: any) {
       setError(err.message);
     }
